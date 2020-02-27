@@ -33,10 +33,10 @@ class Api::V1::UsersController < ApplicationController
     elsif @user.password.blank?
       { error: @user.errors.messages, strength: nil }
 
-    elsif @user.errors.messages[:password].size == 1
+    elsif @user.errors.messages[:password].size < 2 && @user.password.length >= 6
       { error: @user.errors.messages, strength: 'OK' }
 
-    elsif blacklisted? || @user.errors.messages[:password].size > 1
+    elsif blacklisted? || @user.errors.messages[:password].size >= 1
       if blacklisted?
         @user.errors.messages[:password] << 'This password is blacklisted'
       end
