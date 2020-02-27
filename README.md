@@ -2,7 +2,7 @@
 ## Password Service
 ### Description
 When defining passwords for an account, it’s often useful to tell the users the level of security of the passwords they choose.
-The goal of this challenge is to implement a system that helps our users select a good and strong password.
+The goal of this project is helps our users select a good and strong password.
 ## Installation
 ### Clone project
 Clone project using Git over SSH.
