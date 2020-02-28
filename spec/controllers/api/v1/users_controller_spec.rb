@@ -20,15 +20,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response.content_type).to eq "application/json; charset=utf-8"
         expect(response.status).to eq(200)
         response_body = {
-          "error" => {
-            "password" => [
-              "can't be blank",
-              "is too short (minimum is 6 characters)",
-              "should have lower case and upper case words",
-              "should have at least 1 number",
-              "should have at least 1 symbol"
-            ]
-          },
+          "error" => [
+            "can't be blank",
+            "is too short (minimum is 6 characters)",
+            "should have lower case and upper case words",
+            "should have at least 1 number",
+            "should have at least 1 symbol"
+          ],
           "strength" => nil
         }
         expect(JSON.parse(response.body)).to eq(response_body)
@@ -41,13 +39,11 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response.content_type).to eq "application/json; charset=utf-8"
         expect(response.status).to eq(200)
         response_body = {
-          "error" => {
-            "password" => [
-              "should have lower case and upper case words",
-              "should have at least 1 symbol",
-              "This password is blacklisted"
-            ]
-          },
+          "error" => [
+            "should have lower case and upper case words",
+            "should have at least 1 symbol",
+            "This password is blacklisted"
+          ],
           "strength" => "WEAK"
         }
         expect(JSON.parse(response.body)).to eq(response_body)
@@ -60,11 +56,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(response.content_type).to eq "application/json; charset=utf-8"
         expect(response.status).to eq(200)
         response_body = {
-          "error" => {
-            "password" => [
-              "should have at least 1 symbol"
-            ]
-          },
+          "error" => ["should have at least 1 symbol"],
           "strength" => "OK"
         }
         expect(JSON.parse(response.body)).to eq(response_body)
@@ -85,6 +77,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
             "updated_at" => nil,
             "username"=> nil
           },
+          "error" => [],
           "strength" => "STRONG"
         }
         expect(JSON.parse(response.body)).to eq(response_body)
