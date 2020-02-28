@@ -1,10 +1,11 @@
 class Api::V1::UsersController < ApplicationController
+  include Security
 
   # POST api/v1/users/validate_password
   def validate_password
     if params[:user].present?
       @user = User.new(user_params)
-      render json: check_level_of_security, status: 200
+      render json: password_level_of_security, status: 200
     else
       render json: { error: 'Invalid parameters' }, status: 400
     end
@@ -14,34 +15,5 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:username, :password)
-  end
-
-  def blacklist
-    file_path = File.expand_path(File.join(Rails.root, 'app', 'data', 'password_blacklist.txt'), __FILE__)
-
-    @data ||= File.read(file_path)
-  end
-
-  def blacklisted?
-    !!blacklist.match(@user.password)
-  end
-
-  def check_level_of_security
-    if @user.valid? && !blacklisted?
-      { user: @user, error: [], strength: 'STRONG' }
-
-    elsif @user.password.blank?
-      { error: @user.errors.messages[:password], strength: nil }
-
-    elsif @user.password.length >= 6 && @user.errors.messages[:password].size == 1
-      { error: @user.errors.messages[:password], strength: 'OK' }
-
-    elsif blacklisted? || @user.errors.messages[:password].size >= 1
-      if blacklisted?
-        @user.errors.messages[:password] << 'This password is blacklisted'
-      end
-
-      { error: @user.errors.messages[:password], strength: 'WEAK' }
-    end
   end
 end
